@@ -14,7 +14,7 @@ npm install --save adain-simple-event
 ## Usage
 
 ```js
-import SimpleEvent from "adain-simple-event"
+import SimpleEvent from "adain-simple-event";
 
 const MY_EVENT_TYPE = 'MyEvent';
 let callback = function(data){
