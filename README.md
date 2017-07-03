@@ -16,18 +16,18 @@ npm i --save adain-simple-event
 ```js
 import adainSimpleEvent from "adain-simple-event"
 
-const type = 'MyEvent';
+const MY_EVENT_TYPE = 'MyEvent';
 let callback = function(data){
   console.log(data);  // {msg: 'HI'}
 };
-let eventId = SimpleEvent.register(type, callback);
+let eventId = SimpleEvent.register(MY_EVENT_TYPE, callback);
 SimpleEvent.dispatch(type, {msg: 'HI'});
 SimpleEvent.unRegister(eventId);
 ```
 
 ## License
 
-MIT © [SungYong Jang](http://github.com/ADAIN)
+MIT © [ADANI](http://github.com/ADAIN)
 
 [npm-url]: https://npmjs.org/package/adain-simple-event
 [npm-image]: https://img.shields.io/npm/v/adain-simple-event.svg?style=flat-square
