@@ -29,4 +29,10 @@ SimpleEvent.unRegister = function(id){
   delete SimpleEvent.items[SimpleEvent.eventTypeWithIds[id]][id];
 };
 
+SimpleEvent.unRegisterWithArr = function(ids){
+  _.each(ids, (id)=>{
+    SimpleEvent.unRegister(id);
+  });
+};
+
 export default SimpleEvent;
