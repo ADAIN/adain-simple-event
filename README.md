@@ -22,7 +22,22 @@ let callback = function(data){
 };
 let eventId = SimpleEvent.register(MY_EVENT_TYPE, callback);
 SimpleEvent.dispatch(type, {msg: 'HI'});
+
+// unregister
 SimpleEvent.unRegister(eventId);
+
+// register with context
+eventId = SimpleEvent.register(MY_EVENT_TYPE, callback, this);
+
+let eventIds = [];
+eventIds.push(SimpleEvent.register(MY_EVENT_TYPE, callback));
+eventIds.push(SimpleEvent.register(MY_EVENT_TYPE, callback));
+eventIds.push(SimpleEvent.register(MY_EVENT_TYPE, callback));
+
+// unregister with id array
+SimpleEvent.unRegisterWithArr(eventIds);
+eventIds = null;
+
 ```
 
 ## License

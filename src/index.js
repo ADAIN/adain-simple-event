@@ -1,36 +1,49 @@
-import _ from 'lodash';
-
-const SimpleEvent = {};
-SimpleEvent.items = {};
-SimpleEvent.eventTypeWithIds = {};
+export const SimpleEvent = {};
+SimpleEvent.items = new Map();
+SimpleEvent.eventTypeWithIds = new Map();
 SimpleEvent.counter = 0;
 SimpleEvent.dispatch = function(eventType, data){
-  _.forEach(SimpleEvent.items[eventType], (item)=>{
-    if(item.context){
-      item.handler.call(item.context, data);
-    }else{
-      item.handler(data);
-    }
-  });
+  if(SimpleEvent.items.has(eventType)){
+    const eventTypeMap = SimpleEvent.items.get(eventType);
+    eventTypeMap.forEach((item, key)=>{
+      try{
+        if(item.context){
+          item.handler.call(item.context, data);
+        }else{
+          item.handler(data);
+        }
+      }catch(e){
+        console.error(`SimpleEventError(type=${eventType}, key=${key})`, e);
+      }
+    });
+  }
 };
 
 SimpleEvent.register = function(eventType, handler, context){
-  let id = SimpleEvent.counter++;
-  if(!SimpleEvent.items[eventType]){
-    SimpleEvent.items[eventType] = {};
+  const id = SimpleEvent.counter++;
+  if(!SimpleEvent.items.has(eventType)){
+    SimpleEvent.items.set(eventType, new Map());
   }
 
-  SimpleEvent.items[eventType][id] = {eventType, handler, context};
-  SimpleEvent.eventTypeWithIds[id] = eventType;
+  const eventTypeMap = SimpleEvent.items.get(eventType);
+  eventTypeMap.set(id, {eventType, handler, context});
+  SimpleEvent.eventTypeWithIds.set(id, eventType);
   return id;
 };
 
 SimpleEvent.unRegister = function(id){
-  delete SimpleEvent.items[SimpleEvent.eventTypeWithIds[id]][id];
+  const eventType = SimpleEvent.eventTypeWithIds.get(id);
+  const listenerMap = SimpleEvent.items.get(eventType);
+  if(listenerMap.has(id)){
+    listenerMap.delete(id);
+  }
+  if(listenerMap.size === 0){
+    SimpleEvent.items.delete(eventType);
+  }
 };
 
 SimpleEvent.unRegisterWithArr = function(ids){
-  _.each(ids, (id)=>{
+  ids.forEach((id)=>{
     SimpleEvent.unRegister(id);
   });
 };
