@@ -34,6 +34,9 @@ SimpleEvent.register = function(eventType, handler, context){
 SimpleEvent.unRegister = function(id){
   const eventType = SimpleEvent.eventTypeWithIds.get(id);
   const listenerMap = SimpleEvent.items.get(eventType);
+  if(!listenerMap){
+    return;
+  }
   if(listenerMap.has(id)){
     listenerMap.delete(id);
   }
