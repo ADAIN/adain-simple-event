@@ -56,5 +56,7 @@
     "tape": "^4.2.2",
     "watch": "^0.16.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "lodash": "^4.17.11"
+  }
 }
