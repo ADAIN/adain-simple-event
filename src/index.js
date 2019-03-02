@@ -26,7 +26,7 @@ SimpleEvent.register = function(eventType, handler, context){
 };
 
 SimpleEvent.unRegister = function(id){
-  delete SimpleEvent.items[SimpleEvent.eventTypeWithIds[id]][id];
+  SimpleEvent.items[SimpleEvent.eventTypeWithIds[id]][id] = undefined;
 };
 
 SimpleEvent.unRegisterWithArr = function(ids){
