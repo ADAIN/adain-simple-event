@@ -6,6 +6,9 @@ SimpleEvent.eventTypeWithIds = {};
 SimpleEvent.counter = 0;
 SimpleEvent.dispatch = function(eventType, data){
   _.forEach(SimpleEvent.items[eventType], (item)=>{
+    if(item === undefined){
+      return;
+    }
     if(item.context){
       item.handler.call(item.context, data);
     }else{
