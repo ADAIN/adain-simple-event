@@ -29,7 +29,7 @@ SimpleEvent.register = function(eventType, handler, context){
 };
 
 SimpleEvent.unRegister = function(id){
-  SimpleEvent.items[SimpleEvent.eventTypeWithIds[id]][id] = undefined;
+  delete SimpleEvent.items[SimpleEvent.eventTypeWithIds[id]][id];
 };
 
 SimpleEvent.unRegisterWithArr = function(ids){
