@@ -5,6 +5,17 @@ export const SimpleEvent = {
   eventTypeWithIds: {},
   counter: 0,
   dispatch(eventType, data){
+    // skip register event type
+    if(!SimpleEvent.items[eventType]){
+      if(SimpleEvent.isDebug){
+        console.debug(`SimpleEvent Unregistered EventType[${eventType}]. Skip`);
+      }
+      return;
+    }
+
+    if(SimpleEvent.isDebug){
+      console.debug(`SimpleEvent dispatch EventType[${eventType}]`, data);
+    }
     const keys = Object.keys(SimpleEvent.items[eventType]);
     const length = keys.length;
     let item;
@@ -35,10 +46,18 @@ export const SimpleEvent = {
     ){
       console.warn(`SimpleEvent EventType[${eventType}] registered count is more than ${SimpleEvent.warningCount}. Please check out!`);
     }
+
+    if(SimpleEvent.isDebug){
+      console.debug(`SimpleEvent registered EventType[${eventType}]`);
+    }
     return id;
   },
   unRegister(id){
     delete SimpleEvent.items[SimpleEvent.eventTypeWithIds[id]][id];
+
+    if(SimpleEvent.isDebug){
+      console.debug(`SimpleEvent unregistered EventType[${SimpleEvent.eventTypeWithIds[id]}, ${id}]`);
+    }
   },
   unRegisterWithArr(ids){
     const length = ids.length;
