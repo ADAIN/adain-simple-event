@@ -38,8 +38,13 @@ eventIds.push(SimpleEvent.register(MY_EVENT_TYPE, callback));
 SimpleEvent.unRegisterWithArr(eventIds);
 eventIds = null;
 
+// debug mode
+SimpleEvent.isDebug = true;
+
+// change warning count
+SimpleEvent.warningCount = 10;  // default is 5
+
 ```
 
 ## License
-
-MIT © [ADAIN](http://github.com/ADAIN)
+MIT
