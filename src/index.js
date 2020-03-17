@@ -1,11 +1,13 @@
-import _ from 'lodash';
-
 const SimpleEvent = {};
 SimpleEvent.items = {};
 SimpleEvent.eventTypeWithIds = {};
 SimpleEvent.counter = 0;
 SimpleEvent.dispatch = function(eventType, data){
-  _.forEach(SimpleEvent.items[eventType], (item)=>{
+  const keys = Object.keys(SimpleEvent.items[eventType]);
+  const length = keys.length;
+  let item;
+  for (let i = 0; i < length; i++) {
+    item = SimpleEvent.items[eventType][keys[i]];
     if(item === undefined){
       return;
     }
@@ -14,11 +16,15 @@ SimpleEvent.dispatch = function(eventType, data){
     }else{
       item.handler(data);
     }
-  });
+  }
 };
 
 SimpleEvent.register = function(eventType, handler, context){
   let id = SimpleEvent.counter++;
+  if(SimpleEvent.keys.indexOf(eventType) === -1){
+    SimpleEvent.keys.push(eventType);
+  }
+
   if(!SimpleEvent.items[eventType]){
     SimpleEvent.items[eventType] = {};
   }
@@ -33,9 +39,10 @@ SimpleEvent.unRegister = function(id){
 };
 
 SimpleEvent.unRegisterWithArr = function(ids){
-  _.each(ids, (id)=>{
-    SimpleEvent.unRegister(id);
-  });
+  const length = ids.length;
+  for (let i = 0; i < length; i++) {
+    SimpleEvent.unRegister(ids[i]);
+  }
 };
 
 export default SimpleEvent;
