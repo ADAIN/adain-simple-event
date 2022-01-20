@@ -1,12 +1,12 @@
 export const SimpleEvent = {
   isDebug: false,
   warningCount: 5,
-  items: {},
-  eventTypeWithIds: {},
+  items: new Map(),
+  eventTypeWithIds: new Map(),
   counter: 0,
   dispatch(eventType, data){
     // skip register event type
-    if(!SimpleEvent.items[eventType]){
+    if(!SimpleEvent.items.has(eventType)){
       if(SimpleEvent.isDebug){
         console.debug(`SimpleEvent Unregistered EventType[${eventType}]. Skip`);
       }
@@ -16,47 +16,51 @@ export const SimpleEvent = {
     if(SimpleEvent.isDebug){
       console.debug(`SimpleEvent dispatch EventType[${eventType}]`, data);
     }
-    const keys = Object.keys(SimpleEvent.items[eventType]);
-    const length = keys.length;
-    let item;
-    for (let i = 0; i < length; i++) {
-      item = SimpleEvent.items[eventType][keys[i]];
-      if(item === undefined){
-        return;
-      }
-      if(item.context){
-        item.handler.call(item.context, data);
-      }else{
-        item.handler(data);
-      }
+    const eventTypeMap = SimpleEvent.items.get(eventType);
+    if(eventTypeMap){
+      eventTypeMap.forEach(function(item){
+        if(item === undefined){
+          return;
+        }
+        if(item.context){
+          item.handler.call(item.context, data);
+        }else{
+          item.handler(data);
+        }
+      });
     }
   },
   register(eventType, handler, context){
     let id = SimpleEvent.counter++;
-    if(!SimpleEvent.items[eventType]){
-      SimpleEvent.items[eventType] = {};
+    if(!SimpleEvent.items.has(eventType)){
+      SimpleEvent.items.set(eventType, new Map());
     }
 
-    SimpleEvent.items[eventType][id] = {eventType, handler, context};
-    SimpleEvent.eventTypeWithIds[id] = eventType;
+    const eventTypeMap = SimpleEvent.items.get(eventType);
+    if(eventTypeMap){
+      eventTypeMap.set(id, {eventType, handler, context});
+      SimpleEvent.eventTypeWithIds.set(id, eventType);
 
-    if(
-      SimpleEvent.isDebug &&
-      Object.keys(SimpleEvent.items[eventType]).length > SimpleEvent.warningCount
-    ){
-      console.warn(`SimpleEvent EventType[${eventType}] registered count is more than ${SimpleEvent.warningCount}. Please check out!`);
+      if(
+        SimpleEvent.isDebug &&
+        eventTypeMap.size > SimpleEvent.warningCount
+      ){
+        console.warn(`SimpleEvent EventType[${eventType}] registered count is more than ${SimpleEvent.warningCount}. Please check out!`);
+      }
+
+      if(SimpleEvent.isDebug){
+        console.debug(`SimpleEvent registered EventType[${eventType}]`);
+      }
     }
 
-    if(SimpleEvent.isDebug){
-      console.debug(`SimpleEvent registered EventType[${eventType}]`);
-    }
     return id;
   },
   unRegister(id){
-    delete SimpleEvent.items[SimpleEvent.eventTypeWithIds[id]][id];
+    const eventTypeMap = SimpleEvent.items.get(SimpleEvent.eventTypeWithIds.get(id));
+    eventTypeMap.delete(id);
 
     if(SimpleEvent.isDebug){
-      console.debug(`SimpleEvent unregistered EventType[${SimpleEvent.eventTypeWithIds[id]}, ${id}]`);
+      console.debug(`SimpleEvent unregistered EventType[${SimpleEvent.eventTypeWithIds.get(id)}, ${id}]`);
     }
   },
   unRegisterWithArr(ids){

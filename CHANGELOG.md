@@ -5,6 +5,9 @@
 - [v1.0.0](#v100)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+### v4.0.0
+* change object to map
+* IE doesn't work
 
 ### v1.2.0
  * change object to map
