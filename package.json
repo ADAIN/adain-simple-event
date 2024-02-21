@@ -1,6 +1,6 @@
 {
   "name": "adain-simple-event",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "Simple event dispatcher",
   "main": "dist/index.js",
   "files": [
