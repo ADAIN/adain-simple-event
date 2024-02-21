@@ -45,7 +45,7 @@ export const SimpleEvent = {
         SimpleEvent.isDebug &&
         eventTypeMap.size > SimpleEvent.warningCount
       ){
-        console.warn(`SimpleEvent EventType[${eventType}] registered count is more than ${SimpleEvent.warningCount}. Please check out!`);
+        console.warn(`SimpleEvent EventType[${eventType}] registered count is more than ${SimpleEvent.warningCount}[${eventTypeMap.size}]. Please check out!`);
       }
 
       if(SimpleEvent.isDebug){
